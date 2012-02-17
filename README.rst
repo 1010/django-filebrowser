@@ -1,7 +1,7 @@
 Django FileBrowser
 ==================
 
-**Media-Management with Grappelli**.
+**Media-Management without Grappelli**.
 
 The FileBrowser is an extension to the `Django <http://www.djangoproject.com>`_ administration interface in order to:
 
@@ -9,13 +9,14 @@ The FileBrowser is an extension to the `Django <http://www.djangoproject.com>`_ 
 * include images/documents to your models/database using the ``FileBrowseField``.
 * select images/documents with TinyMCE.
 
+It does **NOT** require Grappelli.
+
 Requirements
 ------------
 
 FileBrowser 3.4.1 requires
 
 * Django 1.3 (http://www.djangoproject.com)
-* Grappelli 2.3.5 (https://github.com/sehmaschine/django-grappelli)
 * PIL (http://www.pythonware.com/products/pil/)
 
 Documentation

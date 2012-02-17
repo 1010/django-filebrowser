@@ -8,9 +8,9 @@ def read(fname):
 setup(
     name='django-filebrowser',
     version='3.4.1',
-    description='Media-Management with Grappelli',
+    description='Media-Management without Grappelli',
     long_description = read('README.rst'),
-    author='Patrick Kranzlmueller, Axel Swoboda, Vaclav Mikolasek (vonautomatisch)',
+    author='Patrick Kranzlmueller, Axel Swoboda, Vaclav Mikolasek (vonautomatisch), 10:10, Marco Fucci',
     author_email='werkstaetten@vonautomatisch.at',
     url = 'http://django-filebrowser.readthedocs.org',
     download_url='',
@@ -27,6 +27,5 @@ setup(
     ],
     zip_safe = False,
     install_requires = [
-        'django-grappelli >= 2.3.4',
     ],
 )
