@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "filebrowser/base.html" %}
 
 <!-- LOADING -->
 {% load i18n adminmedia fb_tags fb_pagination %}
@@ -6,6 +6,8 @@
 <!-- STYLESHEETS -->
 {% block stylesheets %}
     {{ block.super }}
+
+	<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/changelists.css" />
     <link rel="stylesheet" type="text/css" href="{{ settings_var.URL_FILEBROWSER_MEDIA }}css/filebrowser.css" />
 {% endblock %}
 
@@ -27,8 +29,15 @@
     <script type="text/javascript" charset="utf-8">
         (function($) {
             $(document).ready(function() {
-                grappelli.initSearchbar();
-                grappelli.initFilter();
+                $("input#searchbar").focus();
+
+		        $("a.toggle-filters").click(function() {
+		            $(".filter-pulldown").toggle();
+		            $("#filters").toggleClass("open");
+		        });
+		        $(".filter_choice").change(function(){
+		            location.href = $(this).val();
+		        });
             });
         })(django.jQuery);
     </script>
@@ -68,47 +77,55 @@
 
 <!-- COLTYPE/BODYCLASS -->
 {% block bodyclass %}change-list filebrowser{% if query.pop %} popup{% endif %}{% endblock %}
-{% block content-class %}content-flexible{% endblock %}
+{% block coltype %}flex{% endblock %}
 
 <!-- BREADCRUMBS -->
 {% block breadcrumbs %}{% include "filebrowser/include/breadcrumbs.html" %}{% endblock %}
 
 <!-- OBJECT-TOOLS -->
 {% block object-tools %}
-<ul class="tools">
+<ul class="object-tools">
     <li><a href="{% url filebrowser:fb_createdir %}{% query_string '' 'p' %}">{% trans "New Folder" %}</a></li>
     <li><a href="{% url filebrowser:fb_upload %}{% query_string '' 'p' %}" class="focus">{% trans "Upload" %}</a></li>
 </ul>
 {% endblock %}
 
 <!-- CONTENT -->
-{% block content %}
-    <div class="module changelist-filters">
-        <!-- PAGINATION -->
-        {% pagination %}
+{% block fb_content %}
+    <div id="changelist" class="module filtered">
+        <!-- SEARCH -->
+		<div id="toolbar">
+	            <form id="changelist-search" action="." method="get">
+					<div><!-- DIV needed for valid HTML -->
+						<label for="searchbar"><img src="{% admin_media_prefix %}img/admin/icon_searchbox.png" alt="Search" /></label>
+		
+		                <input type="text" size="40" name="q" value="{{ query.q }}" id="searchbar" />
+		                {% if query.filter_type %}<input type="hidden" name="filter_type" value="{{ query.filter_type }}" />{% endif %}
+		                {% if query.filter_date %}<input type="hidden" name="filter_date" value="{{ query.filter_date }}" />{% endif %}
+		                {% if query.o %}<input type="hidden" name="o" value="{{ query.o }}" />{% endif %}
+		                {% if query.ot %}<input type="hidden" name="ot" value="{{ query.ot }}" />{% endif %}
+		                {% if query.pop %}<input type="hidden" name="pop" value="{{ query.pop }}" />{% endif %}
+		                {% if query.type %}<input type="hidden" name="type" value="{{ query.type }}" />{% endif %}
+		                {% if query.format %}<input type="hidden" name="format" value="{{ query.format }}" />{% endif %}
+		                {% if query.dir %}<input type="hidden" name="dir" value="{{ query.dir|urlencode }}" />{% endif %}
+		                <button class="search" type="submit" value="">Search</button>
+		
+						<span class="small quiet">
+						{{ filelisting.results_current }} {% ifequal filelisting.results_current 1 %}{% trans 'result' %}{% else %}{% trans 'results' %}{% endifequal %}
+						{% if query.q or filelisting.results_total != filelisting.results_current %}
+			            (<a href="{% query_string "" "filter_date,filter_type,p,q" %}" class="total">{{ filelisting.results_total }} {% trans 'total' %}</a>)
+						{% endif %}
+						</span>
+					</div>
+	            </form>
+		</div>
+		
         <!-- FILTERS -->
         {% include "filebrowser/include/filter.html" %}
-        <!-- SEARCH -->
-        <div id="search" class="module search span-6">
-            <form id="changelist-search" action="." method="get">
-                <input type="text" size="40" name="q" value="{{ query.q }}" id="searchbar" />
-                {% if query.filter_type %}<input type="hidden" name="filter_type" value="{{ query.filter_type }}" />{% endif %}
-                {% if query.filter_date %}<input type="hidden" name="filter_date" value="{{ query.filter_date }}" />{% endif %}
-                {% if query.o %}<input type="hidden" name="o" value="{{ query.o }}" />{% endif %}
-                {% if query.ot %}<input type="hidden" name="ot" value="{{ query.ot }}" />{% endif %}
-                {% if query.pop %}<input type="hidden" name="pop" value="{{ query.pop }}" />{% endif %}
-                {% if query.type %}<input type="hidden" name="type" value="{{ query.type }}" />{% endif %}
-                {% if query.format %}<input type="hidden" name="format" value="{{ query.format }}" />{% endif %}
-                {% if query.dir %}<input type="hidden" name="dir" value="{{ query.dir|urlencode }}" />{% endif %}
-                <button class="search" type="submit" value="">&nbsp;</button>
-            </form>
-        </div>
-        <br clear="all" />
-    </div>
-    <div id="changelist" class="container-full">
+	
         <!-- RESULTS -->
         {% if filelisting.results_current %}
-            <div class="module changelist-results">
+            <div class="changelist-results results">
                 <table cellspacing="0">
                     {% include "filebrowser/include/tableheader.html" %}
                     <tbody>
@@ -117,7 +134,7 @@
                 </table>
             </div>
         {% endif %}
-        <!-- PAGINATION -->
-        {% pagination %}
-    </div>
+
+		<p class="paginator"> {{ filelisting.results_total }} files </p>
+	</div>
 {% endblock %}

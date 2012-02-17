@@ -1,0 +1,7 @@
+.collapse.open .form-row {
+    display: block;
+}
+
+.collapse.closed .form-row {
+    display: none;
+}

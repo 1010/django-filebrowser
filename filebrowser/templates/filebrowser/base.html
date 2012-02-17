@@ -1,0 +1,29 @@
+{% extends "admin/base_site.html" %}{% load adminmedia %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{{ settings_var.URL_FILEBROWSER_MEDIA }}grappelli/css/grappelli.css" />
+{{ block.super }}{% block stylesheets %}{% endblock %}
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">window.__admin_media_prefix__ = "/static/admin/";</script>
+
+
+<script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
+{% comment %}<script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>{% endcomment %}
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+<script type="text/javascript" src="{{ settings_var.URL_FILEBROWSER_MEDIA }}grappelli/js/jquery.grp_collapsible.js"></script>
+{% block javascripts %}{% endblock %}	
+{% endblock %}
+
+
+{% block content %}
+<div id="content-main">
+	{% block object-tools %}{% endblock %}
+	
+	{% block fb_content %}
+	{% endblock %}
+</div>
+{% endblock %}

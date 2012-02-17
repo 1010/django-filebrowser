@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "filebrowser/base.html" %}
 
 <!-- LOADING -->
 {% load i18n l10n adminmedia fb_tags %}
@@ -18,7 +18,7 @@
     <script type="text/javascript">
     (function($){
         $(document).ready(function() {
-            $("div#content .collapse").grp_collapsible({
+            $("div#content-main .collapse").grp_collapsible({
                 on_init: function(elem, options) {
                     // open collapse (and all collapse parents) in case of errors
                     if (elem.find("ul.errorlist").length > 0) {
@@ -94,26 +94,25 @@
 
 <!-- COLTYPE/BODYCLASS -->
 {% block bodyclass %}change-form filebrowser{% if query.pop %} popup{% endif %}{% endblock %}
-{% block content-class %}content-flexible{% endblock %}
 
 <!-- BREADCRUMBS -->
 {% block breadcrumbs %}{% include "filebrowser/include/breadcrumbs.html" %}{% endblock %}
 
 <!-- CONTENT -->
-{% block content %}
+{% block fb_content %}
 <div class="container-flexible">
     <div class="form-container">
         <form>
             <fieldset class="module aligned">
-            <div class="row" id="file-uploader">
+            <div class="form-row" id="file-uploader">
                 <noscript>
                     {% trans "Please enable Javascript to upload files." %}
                 </noscript>
             </div>
             </fieldset>
-            <fieldset class="module collapse closed">
+            <fieldset class="module collapse closed aligned">
                 <h2 class="collapse-handler">{% trans "Help" %}</h2>
-                <div class="row">
+                <div class="form-row">
                     {% for extension in settings_var.EXTENSIONS.items %}
                         {% ifnotequal extension.0 'Folder' %}
                             <div class="column span-4"><label class="required">{% if forloop.first %}{% trans "Allowed" %}:{% else %}&nbsp;{% endif %}</label></div>
@@ -121,12 +120,12 @@
                         {% endifnotequal %}
                     {% endfor %}
                 </div>
-                <div class="row">
+                <div class="form-row">
                     <div class="column span-4"><label class="required">{% trans "Max. Filesize" %}:</label></div>
                     <div class="column span-12 last"><p>{{ settings_var.MAX_UPLOAD_SIZE|filesizeformat }}</p></div><br clear="all" />
                 </div>
                 {% if settings_var.NORMALIZE_FILENAME or settings_var.CONVERT_FILENAME %}
-                    <div class="row">
+                    <div class="form-row">
                         <div class="column span-16 last"><p>
                             {% if settings_var.NORMALIZE_FILENAME %}
                                 {% trans "The Name will be normalized by converting or stripping all non-standard characters." %} <br />
