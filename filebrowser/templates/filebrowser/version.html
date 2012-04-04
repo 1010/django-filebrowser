@@ -48,11 +48,27 @@
         {% endifequal %}
         {% ifequal query.pop '2' %} <!-- TinyMCE -->
         <script type="text/javascript" charset="utf-8">
-            (function($) {
-                $(document).ready(function() {
-                    FileBrowserDialogue.fileSubmit('{{ image_version.url|escapejs }}');
-                });
-            })(django.jQuery);
+        (function($) {
+            $(document).ready(function() {
+		        var URL = '{{ image_version.url|escapejs }}';
+		        var win = tinyMCEPopup.getWindowArg("window");
+
+		        // insert information now
+		        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
+
+		        // change width/height & show preview
+		        if (win.ImageDialog){
+		            if (win.ImageDialog.getImageData)
+		                win.ImageDialog.getImageData();
+		            if (win.ImageDialog.showPreviewImage)
+		                win.ImageDialog.showPreviewImage(URL);
+		        }
+
+				setTimeout('tinyMCEPopup.close()', 0);
+				
+                // FileBrowserDialogue.fileSubmit('{{ image_version.url|escapejs }}');
+            });
+        })(django.jQuery);
         </script>
         {% endifequal %}
     {% endif %}
