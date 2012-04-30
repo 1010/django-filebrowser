@@ -74,7 +74,7 @@
                         <ul class="pulldown-versions">
                             {% for version in settings_var.ADMIN_VERSIONS  %}
                                 {% version_setting version %}
-                                <li{% if forloop.last %} class="last"{% endif %}><a href="" title="" onclick="OpenFile(ProtectPath('{% version fileobject version %}'));return false;">{{ version_setting.verbose_name }}</a></li>
+                                <li{% if forloop.last %} class="last"{% endif %}><a href="" title="{% if version_setting.width %}width:{{ version_setting.width }}px {% endif %}{% if version_setting.height %}height:{{ version_setting.height }}px{% endif %}" onclick="OpenFile(ProtectPath('{% version fileobject version %}'));return false;">{{ version_setting.verbose_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>
